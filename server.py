@@ -84,4 +84,4 @@ def classify():
     print json.dumps(trajectories_to_label)
     return json.dumps(trajectories_to_label)
 
-run(host='localhost', port=8080, debug=True)
+run(host='206.167.183.217', port=80, debug=True)
