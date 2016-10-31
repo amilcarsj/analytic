@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>ANALYTiC</title>
+	<link rel="stylesheet" type="text/css" href="./css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<!--<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>!-->
+	<script src='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js'></script>
+	<link href='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css' rel='stylesheet' />
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+
+<body>
+	<nav id='main-nav'>
+		<nav id='top-nav'>
+			<button id='logo' class='dropbtn'></button>
+			<nav id='data-dropdown-container' class='dropdown' >
+				<button id='load-data' class='dropbtn'>Load data</button>
+				<nav id="databases-dropdown" class="dropdown-content">
+					<a id='fishing'>Fishing Vessels</a>
+					<!-- <a id='geolife'>Geolife</a> -->
+					<a id='hurricanes'>Hurricanes</a>
+				</nav>
+			</nav>
+			<nav>
+				<button id='classifier' class='dropbtn'>Classifier</button>
+				<nav id="classifiers-dropdown" class="dropdown-content">
+					<a id='lr'>Logistic Regression</a>
+					<a id='gnb'>Gaussian Naive Bayes</a>
+					<a id='dt'>Decision Tree</a>
+					<a id='knn'>KNN</a>
+					<a id='ab'>Ada Boost</a>
+					<a id='rf'>Random Forests</a>
+				</nav>
+			</nav>
+			<nav id='al-dropdown-container' class='dropdown'>
+				<button id='al-strategy' class='dropbtn'>AL strategy</button>
+				<nav id="al-dropdown" class="dropdown-content">
+					<a id='rnd'>Random Sampling</a>
+					<a id='unc'>Uncertain Sampling</a>
+					<a id='qbc'>Query-by-committee</a>
+				</nav>
+			</nav>
+		</nav>
+		<nav id='alert-message-holder'>
+			<nav id='alert-message-nav'></nav>
+		</nav>
+		<nav id='middle-nav'>
+			 <nav id='middle-left-nav'>
+			 	<nav id='loading' class='loader'></nav>
+			 	<nav id='map'></nav>
+			 </nav>
+			 <nav id='right'>
+			 	<nav id='data'>
+			 		<h1>Data</h1>
+					<nav id='features-tbl'></nav>
+				</nav>
+				<nav id='add-class-nav'>
+					<!--<form id='add-label-form'>!-->
+						<dl>Label: 
+							<select name='label-select' id='label-selector'></select>
+							<button id='add-label-to-trajectory' class='button-error' disabled>Add</button>
+						</dl>
+					<!--</form>!-->
+				</nav>
+			</nav>
+		</nav>
+		<nav id='next-step-nav'>
+			<dl class='inline extra-margin'>Next step: <dt id='next-step-message'></dt></dl>
+		</nav>
+		<nav id='bottom-nav'>
+			<!--<nav id='classification-container'>!-->
+				<nav id='al-info' class='bottom-nav-margin'>
+					 <h1>Active Learning</h1>
+					 <nav id='al-header'>
+						 <dl class='inline'>Strategy: <dt id='al-strategy-name'>Random Sampling</dt></dl>
+						 <dl class='inline'>Classifier: <dt id='classifier-name'>Logistic Regression</dt></dl>
+					 	 <dl>Time step: <select name='time-step' id='time-step'>
+					 			<option>5</option>
+					 			<option>10</option>
+					 			<option>20</option>
+					 	 	</select>
+					 	 </dl>
+					 	 <dl>Total budget: <select name='total-budget' id='total-budget'>
+					 			<option>20</option>
+					 			<option>40</option>
+					 			<option>60</option>
+					 			<option>80</option>
+					 			<option>100</option>
+					 	 	</select>
+					 	 </dl>
+						<nav id='al-btn-nav'>
+					 		<button id='start-button' class='button-error' disabled>Run</button>
+					 	</nav>
+					 </nav>					 
+				</nav>
+				<nav id='summary' class='bottom-nav-margin'>
+					<h1>Summary</h1>
+					<dl class='inline'>Number of trajectories: <dt id='nof-trajectories'></dt></dl>
+						<dl class='inline'>Remaining: <dt id='remaining'></dt></dl>
+						<dl class='inline'>Total labeled: <dt id='total-labeled'>0</dt></dl>
+						<dl class='inline'>Remaining from budget: <dt id='remaining-budget'></dt></dl>
+				</nav>
+				<nav id='labels-info'>
+					 <h1>Manage labels</h1>
+					 <dl>Name: <span class='flex-span'><input type='text' id='label-txt' value=''></span><button id='add-new-label' class='button-error' disabled>Add</button></dl>
+					 <dl>
+					 	Unlabeled: <br> <input id='unlabeled-color' type="color" name="favcolor" value="#FF0000">
+					 </dl>
+				</nav>
+			<!--</nav>!-->
+		</nav>
+		<nav id='results-nav'>
+			<nav id='features-distribution'>
+				<dl>Feature: <select name='feature-select' id='feature-selector'></select></dl>
+				<nav id='distribution-chart'></nav>
+			</nav>
+			<nav id='labels-distribution'>
+				<dl></dl>
+			</nav>
+		</nav>
+	</nav>
+	<script type="text/javascript" src="./analytic_js"></script> 
+</body>
+
+</html>
