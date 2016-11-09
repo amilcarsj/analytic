@@ -1,14 +1,7 @@
 import math
 import numpy as np
 from collections import defaultdict
-import json
-from sklearn.naive_bayes import MultinomialNB, GaussianNB, BernoulliNB
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import SVC
-from sklearn.tree import DecisionTreeClassifier
-
+from analytic import trajectory_manager
 import scipy.sparse as ss
 
 class RandomBootstrap(object):
@@ -289,61 +282,19 @@ class QBCStrategy(BaseStrategy):
 
 def run_al_strategy(strategy, dataset, classifier_name, labeled_data, time_step):
 
-    t = 1 #seed value
-    all_data_dict = {}
     labeled_data_dict = {}
+
 
     for label in labeled_data:
         labeled_data_dict[label["tid"]] = label["label_value"]
 
-    file_name = None
+    file_name = trajectory_manager.get_file_name(dataset)
 
-    if (dataset=='fishing'):
-        file_name = './data/fishing/fishing_vessels.geojson'
-
-    elif (dataset=='geolife'):
-        file_name = './data/geolife/geolife.geojson'
-
-    elif (dataset=='hurricanes'):
-        file_name = './data/hurricanes/hurricanes.geojson'
-
-    with open(file_name) as data_file:
-        for line in data_file:
-            line_object = json.loads(str(line))
-            all_data_dict[line_object["tid"]] = line_object["properties"]
-
-
-    model = None
-
-    if classifier_name=='Logistic Regression':
-        model = LogisticRegression()
-        classifier_name='LogisticRegression'
-    elif classifier_name=='Random Forest':
-        classifier_name='RandomForestClassifier'
-        model = RandomForestClassifier()
-    elif classifier_name=='KNN':
-        classifier_name='KNeighborsClassifier'
-        model = KNeighborsClassifier()
-    elif classifier_name=='Decision Tree':
-        classifier_name='DecisionTreeClassifier'
-        model = DecisionTreeClassifier()
-    elif classifier_name == 'Ada Boost':
-        classifier_name = 'AdaBoostClassifier'
-        model = AdaBoostClassifier()
-    elif classifier_name == 'Gaussian Naive Bayes':
-        classifier_name = 'GaussianNB'
-        model = GaussianNB()
-    active_s = None
-
-    if strategy == 'Random Sampling':
-        active_s = RandomStrategy(seed=t)
-    elif strategy == 'Query-by-committee':
-        active_s = QBCStrategy(classifier=eval(classifier_name), classifier_args=model.get_params())
-    elif strategy == 'Uncertain Sampling':
-        active_s = UncStrategy(seed=t)
+    all_data_dict = trajectory_manager.load_data(file_name)
+    model = trajectory_manager.get_classifier_model(classifier_name)
+    active_s = trajectory_manager.get_al_strategy(strategy, model)
 
     data_to_train_array = []
-    data_already_labeled_array = []
     provided_labels = []
     tids_labeled = []
     tids_not_labeled = set()
@@ -355,12 +306,8 @@ def run_al_strategy(strategy, dataset, classifier_name, labeled_data, time_step)
         map_tid_to_index[index] = tid_key
         if tid_key in labeled_data_dict:
             tids_labeled.append(index)
-            #for feature in all_data_dict[tid_key]:
-            #    data_line.append(all_data_dict[tid_key][feature])
             label = str(labeled_data_dict[tid_key])
             provided_labels.append(label)
-            #data_line.append(label)
-            #data_already_labeled_array.append(data_line)
 
         else:
             tids_not_labeled.add(index)
@@ -384,8 +331,8 @@ def run_al_strategy(strategy, dataset, classifier_name, labeled_data, time_step)
         numeric_labels.append(map_label_bin[l])
 
     #print "numeric labels", numeric_labels
-    print "tids not labeled", [map_tid_to_index[i] for i in tids_not_labeled]
-    print "tids labeled", [map_tid_to_index[i] for i in tids_labeled]
+    #print "tids not labeled", [map_tid_to_index[i] for i in tids_not_labeled]
+    #print "tids labeled", [map_tid_to_index[i] for i in tids_labeled]
     #print "data to train", data_to_train_array
 
     data_to_train_array = np.array(data_to_train_array)
@@ -402,7 +349,7 @@ def run_al_strategy(strategy, dataset, classifier_name, labeled_data, time_step)
                                          current_train_indices=tids_labeled,current_train_y=provided_labels)
     final_indices = [map_tid_to_index[i] for i in newIndices]
 
-    out_json = {}
-    out_json.update(trajectories_to_label=final_indices)
+    #out_json = {}
+    #out_json.update(trajectories_to_label=final_indices)
 
-    return out_json
+    return final_indices

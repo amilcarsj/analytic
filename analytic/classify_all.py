@@ -8,52 +8,21 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
+from analytic import trajectory_manager
 
 import scipy.sparse as ss
 
 def run_classification(dataset, classifier_name, labeled_data):
     t = 1  # seed value
-    all_data_dict = {}
     labeled_data_dict = {}
 
     for label in labeled_data:
         labeled_data_dict[label["tid"]] = label["label_value"]
 
-    file_name = None
+    file_name = trajectory_manager.get_file_name(dataset)
 
-    if (dataset == 'fishing'):
-        file_name = './data/fishing/fishing_vessels.geojson'
-
-    elif (dataset == 'geolife'):
-        file_name = './data/geolife/geolife.geojson'
-
-    elif (dataset == 'hurricanes'):
-        file_name = './data/hurricanes/hurricanes.geojson'
-
-    with open(file_name) as data_file:
-        for line in data_file:
-            line_object = json.loads(str(line))
-            all_data_dict[line_object["tid"]] = line_object["properties"]
-
-    model = None
-    if classifier_name=='Logistic Regression':
-        model = LogisticRegression()
-        classifier_name='LogisticRegression'
-    elif classifier_name=='Random Forest':
-        classifier_name='RandomForestClassifier'
-        model = RandomForestClassifier()
-    elif classifier_name=='KNN':
-        classifier_name='KNeighborsClassifier'
-        model = KNeighborsClassifier()
-    elif classifier_name=='Decision Tree':
-        classifier_name='DecisionTreeClassifier'
-        model = DecisionTreeClassifier()
-    elif classifier_name == 'Ada Boost':
-        classifier_name = 'AdaBoostClassifier'
-        model = AdaBoostClassifier()
-    elif classifier_name == 'Gaussian Naive Bayes':
-        classifier_name = 'GaussianNB'
-        model = GaussianNB()
+    all_data_dict = trajectory_manager.load_data(file_name)
+    model = trajectory_manager.get_classifier_model(classifier_name)
 
     data_to_train_array = []
     data_already_labeled_array = []
@@ -97,8 +66,8 @@ def run_classification(dataset, classifier_name, labeled_data):
         numeric_labels.append(map_label_bin[l])
 
     # print "numeric labels", numeric_labels
-    print "tids not labeled", [map_tid_to_index[i] for i in tids_not_labeled]
-    print "tids labeled", [map_tid_to_index[i] for i in tids_labeled]
+    #print "tids not labeled", [map_tid_to_index[i] for i in tids_not_labeled]
+    #print "tids labeled", [map_tid_to_index[i] for i in tids_labeled]
     # print "data to train", data_to_train_array
 
     data_to_train_array = np.array(data_to_train_array)
@@ -114,13 +83,19 @@ def run_classification(dataset, classifier_name, labeled_data):
     predicted = model.predict(test_data)
     #print predicted
     final_indices = [map_tid_to_index[i] for i in tids_not_labeled]
+    final_labeled_indices = [map_tid_to_index[i] for i in tids_labeled]
     final_dict = {}
     #print final_indices
     index = 0
     for i in final_indices:
         final_dict[i] = predicted[index]
         index += 1
+    index = 0
+    for i in final_labeled_indices:
+        final_dict[i] = provided_labels[index]
+        index += 1
 
-    out_json = {}
-    out_json.update(predicted_values=final_dict)
-    return out_json
+    # out_json = {}
+    # out_json.update(predicted_values=final_dict)
+    # return out_json
+    return final_dict
