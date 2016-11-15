@@ -19,39 +19,62 @@ def load_data(filename):
     return all_data_dict
 
 
-def get_trajectories_geojson(filename, tids):
+def get_trajectories_geojson(trajectory_filename, point_file_name, tids):
     out = ''
-    with open(filename) as data_file:
-        for line in data_file:
-            line_object = json.loads(str(line))
-            if line_object["tid"] in tids:
-                out += line
-    data_file.close()
+    with open(trajectory_filename) as trajectory_data_file:
+        for traj_line in trajectory_data_file:
+            trajectory_line_object = json.loads(str(traj_line))
+            points_json = []
+            tid = trajectory_line_object["tid"]
+            if tid in tids:
+                # out += line old ate aqui
+                # print 'old ', trajectory_line_object
+                # get points new
+                with open(point_file_name) as point_data_file:
+                    for point_line in point_data_file:
+                        point_line_object = json.loads(str(point_line))
+                        point_tid = point_line_object['tid']
+                        if point_tid == tid:
+                            points_json.append(point_line_object)
+                trajectory_line_object['points'] = points_json
+                # new_traj_line = json.dumps(trajectory_line_object)
+                new_traj_line = json.dumps(trajectory_line_object)
+                # print 'new ',new_traj_line
+                out += new_traj_line+'\n'
+
+
+    trajectory_data_file.close()
+    point_data_file.close()
+    print out
     return out
 
 
-def get_random_trajectories(filename):
+def get_random_trajectories(trajectory_filename, point_file_name):
     bag_size = 20
-    all_data_dict = load_data(filename)
+    all_data_dict = load_data(trajectory_filename)
     all_tids = all_data_dict.keys()
     randgen = np.random.RandomState()
     all_tids = randgen.permutation(all_tids)
     tids = all_tids[:bag_size]
-    out = get_trajectories_geojson(filename, tids)
+    out = get_trajectories_geojson(trajectory_filename, point_file_name, tids)
     return out
 
 
 def get_file_name(dataset_name):
+
     if (dataset_name=='fishing'):
         file_name = './data/fishing/fishing_vessels.geojson'
+        point_file_name = './data/fishing/fishing_vessels_points.geojson'
 
     elif (dataset_name=='geolife'):
         file_name = './data/geolife/geolife.geojson'
+        point_file_name = './data/geolife/geolife_points.geojson'
 
     elif (dataset_name=='hurricanes'):
         file_name = './data/hurricanes/hurricanes.geojson'
+        point_file_name = './data/hurricanes/hurricanes_points.geojson'
 
-    return file_name
+    return file_name, point_file_name
 
 
 def get_classifier_model(classifier_name):

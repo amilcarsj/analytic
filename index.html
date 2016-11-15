@@ -53,8 +53,13 @@
 			 	<nav id='map'></nav>
 			 </nav>
 			 <nav id='right'>
-			 	<nav id='data'>
-			 		<h1>Data</h1>
+			 	<nav id='point-features-data'>
+			 		<h1>Point Features</h1>
+			 		<dl>Feature name: <select name='point-feature-selector' id='point-feature-selector'></select></dl>
+			 		<nav id='point-feat-line-chart'></nav>	
+				</nav>
+				<nav id='trajectory-features-data'>
+					<h1>Trajectory Features</h1>
 					<nav id='features-tbl'></nav>
 				</nav>
 				<nav id='add-class-nav'>
@@ -116,7 +121,7 @@
 		</nav>
 		<nav id='results-nav'>
 			<nav id='features-distribution'>
-				<dl>Feature: <select name='feature-select' id='feature-selector'></select></dl>
+				<dl class='dl-center'>Feature: <select name='feature-select' id='feature-selector'></select></dl>
 				<nav id='distribution-chart'></nav>
 			</nav>
 			<nav id='labels-distribution'>

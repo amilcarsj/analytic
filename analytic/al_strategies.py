@@ -288,7 +288,7 @@ def run_al_strategy(strategy, dataset, classifier_name, labeled_data, time_step)
     for label in labeled_data:
         labeled_data_dict[label["tid"]] = label["label_value"]
 
-    file_name = trajectory_manager.get_file_name(dataset)
+    file_name, point_file_name = trajectory_manager.get_file_name(dataset)
 
     all_data_dict = trajectory_manager.load_data(file_name)
     model = trajectory_manager.get_classifier_model(classifier_name)
