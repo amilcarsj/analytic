@@ -3,6 +3,12 @@ import numpy as np
 from collections import defaultdict
 from analytic import trajectory_manager
 import scipy.sparse as ss
+from sklearn.naive_bayes import MultinomialNB, GaussianNB, BernoulliNB
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
 
 class RandomBootstrap(object):
     """Class - used if strategy selected is rand"""
@@ -170,7 +176,8 @@ class UncStrategy(BaseStrategy):
 class QBCStrategy(BaseStrategy):
     """Class - used if strategy selected is qbc, inherits from :mod:`al.instance_strategies.BaseStrategy`"""
 
-    def __init__(self, classifier, classifier_args, seed=0, sub_pool=None, num_committee=10):
+    # def __init__(self, classifier, classifier_args, seed=0, sub_pool=None, num_committee=10):
+    def __init__(self, classifier_name, seed=0, sub_pool=None, num_committee=10):
         """Instantiate :mod:`al.instance_strategies.QBCStrategy`
 
         **Parameters**
@@ -185,8 +192,8 @@ class QBCStrategy(BaseStrategy):
         super(QBCStrategy, self).__init__(seed=seed)
         self.sub_pool = sub_pool
         self.num_committee = num_committee
-        self.classifier = classifier
-        self.classifier_args = classifier_args
+        self.classifier = classifier_name
+        # self.classifier_args = classifier_args
 
     def vote_entropy(self, sample):
         """ Computes vote entropy.
@@ -257,7 +264,11 @@ class QBCStrategy(BaseStrategy):
 
             bag = [current_train_indices[i] for i in r_inds]
             bag_y = [current_train_y[i] for i in r_inds]
-            new_classifier = self.classifier(**self.classifier_args)
+            # new_classifier = self.classifier(**self.classifier_args)
+            # print self.classifier, type(self.classifier)
+
+            new_classifier = trajectory_manager.get_classifier_model(self.classifier)
+            # print new_classifier
             new_classifier.fit(X[bag], bag_y)
 
             predictions = new_classifier.predict(X[candidates])
@@ -281,7 +292,7 @@ class QBCStrategy(BaseStrategy):
 
 
 def run_al_strategy(strategy, dataset, classifier_name, labeled_data, time_step):
-
+    classifier_args = dict()
     labeled_data_dict = {}
 
 
@@ -292,7 +303,7 @@ def run_al_strategy(strategy, dataset, classifier_name, labeled_data, time_step)
 
     all_data_dict = trajectory_manager.load_data(file_name)
     model = trajectory_manager.get_classifier_model(classifier_name)
-    active_s = trajectory_manager.get_al_strategy(strategy, model)
+    active_s = trajectory_manager.get_al_strategy(strategy, model, classifier_name)
 
     data_to_train_array = []
     provided_labels = []

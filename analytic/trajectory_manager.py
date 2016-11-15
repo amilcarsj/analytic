@@ -80,34 +80,36 @@ def get_file_name(dataset_name):
 def get_classifier_model(classifier_name):
     model = None
     if classifier_name=='Logistic Regression':
+        classifier_name='LogisticRegression'
         model = LogisticRegression()
-        #classifier_name='LogisticRegression'
     elif classifier_name=='Random Forest':
-        #classifier_name='RandomForestClassifier'
+        classifier_name='RandomForestClassifier'
         model = RandomForestClassifier()
     elif classifier_name=='KNN':
-        #classifier_name='KNeighborsClassifier'
+        classifier_name='KNeighborsClassifier'
         model = KNeighborsClassifier()
     elif classifier_name=='Decision Tree':
-        #classifier_name='DecisionTreeClassifier'
+        classifier_name='DecisionTreeClassifier'
         model = DecisionTreeClassifier()
     elif classifier_name == 'Ada Boost':
-        #classifier_name = 'AdaBoostClassifier'
+        classifier_name = 'AdaBoostClassifier'
         model = AdaBoostClassifier()
     elif classifier_name == 'Gaussian Naive Bayes':
-        #classifier_name = 'GaussianNB'
+        classifier_name = 'GaussianNB'
         model = GaussianNB()
 
+    # model = eval((classifier_name))
     return model
 
 
-def get_al_strategy(strategy_name, model):
+def get_al_strategy(strategy_name, model, classifier_name):
     active_s = None
     t = 1
     if strategy_name == 'Random Sampling':
         active_s = al_strategies.RandomStrategy(seed=t)
     elif strategy_name == 'Query-by-committee':
-        active_s = al_strategies.QBCStrategy(classifier=model, classifier_args=model.get_params())
+        # active_s = al_strategies.QBCStrategy(classifier=model, classifier_args=model.get_params())
+        active_s = al_strategies.QBCStrategy(classifier_name=classifier_name)
     elif strategy_name == 'Uncertain Sampling':
         active_s = al_strategies.UncStrategy(seed=t)
 

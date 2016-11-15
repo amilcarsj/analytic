@@ -15,6 +15,7 @@ import scipy.sparse as ss
 def run_classification(dataset, classifier_name, labeled_data):
     t = 1  # seed value
     labeled_data_dict = {}
+    classifier_args = ''
 
     for label in labeled_data:
         labeled_data_dict[label["tid"]] = label["label_value"]
