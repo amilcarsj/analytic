@@ -98,14 +98,14 @@
 					 	 	</select>
 					 	 </dl>
 						<nav id='al-btn-nav'>
-					 		<button id='start-button' class='button-error' disabled>Run</button>
+					 		<button id='run-button' class='button-error' disabled>Run</button>
 					 	</nav>
 					 </nav>					 
 				</nav>
 				<nav id='summary' class='bottom-nav-margin'>
 					<h1>Summary</h1>
-					<dl class='inline'>Number of trajectories: <dt id='nof-trajectories'></dt></dl>
-						<dl class='inline'>Remaining: <dt id='remaining'></dt></dl>
+					<!-- <dl class='inline'>Number of trajectories: <dt id='nof-trajectories'></dt></dl> -->
+						<!-- <dl class='inline'>Remaining: <dt id='remaining'></dt></dl> -->
 						<dl class='inline'>Total labeled: <dt id='total-labeled'>0</dt></dl>
 						<dl class='inline'>Remaining from budget: <dt id='remaining-budget'></dt></dl>
 				</nav>
@@ -120,8 +120,12 @@
 			<!--</nav>!-->
 		</nav>
 		<nav id='results-nav'>
+			<nav id='point-features-distribution'>
+				<dl>Point Feature: <select id='result-point-feature-selector'></select></dl>
+				<nav id='point-features-distribution-chart'></nav>
+			</nav>
 			<nav id='trajectory-features-distribution'>
-				<dl>Feature: <select name='feature-select' id='feature-selector'></select></dl>
+				<dl>Trajectory Feature: <select name='feature-select' id='trajectory-feature-selector'></select></dl>
 				<nav id='trajectory-features-distribution-chart'></nav>
 			</nav>
 			<nav id='labels-distribution'>
