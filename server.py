@@ -34,7 +34,7 @@ def images(image_name):
 @get('/data/geolife', method='GET')
 def geolife_geojson():
     response.headers['Access-Control-Allow-Origin'] = '*'
-    out = trajectory_manager.get_random_trajectories('./data/geolife/geolife.geojson')
+    out = trajectory_manager.get_random_trajectories('./data/geolife/geolife.geojson', './data/geolife/geolife_points.geojson')
     response.body = out
     return response
 
@@ -51,7 +51,7 @@ def fishing_geojson():
 @get('/data/hurricanes', method='GET')
 def hurricanes_geojson():
     response.headers['Access-Control-Allow-Origin'] = '*'
-    out = trajectory_manager.get_random_trajectories('./data/hurricanes/hurricanes.geojson')
+    out = trajectory_manager.get_random_trajectories('./data/hurricanes/hurricanes.geojson', './data/hurricanes/hurricanes_points.geojson')
     response.body = out
     return response
 
