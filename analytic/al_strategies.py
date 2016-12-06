@@ -9,6 +9,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
+import http_get_solr_data
 
 class RandomBootstrap(object):
     """Class - used if strategy selected is rand"""
@@ -292,16 +293,18 @@ class QBCStrategy(BaseStrategy):
 
 
 def run_al_strategy(strategy, dataset, classifier_name, labeled_data, time_step):
+# def run_al_strategy(strategy, all_data_dict, classifier_name, labeled_data, time_step):
     classifier_args = dict()
     labeled_data_dict = {}
-
 
     for label in labeled_data:
         labeled_data_dict[label["tid"]] = label["label_value"]
 
-    file_name, point_file_name = trajectory_manager.get_file_name(dataset)
+    # file_name, point_file_name = trajectory_manager.get_file_name(dataset)
+    # all_data_dict = trajectory_manager.load_line_data(file_name)
+    all_data_tids = http_get_solr_data.get_tids_in_database(dataset)
+    all_data_traj_feats = http_get_solr_data.get_all_trajectory_features(dataset)
 
-    all_data_dict = trajectory_manager.load_data(file_name)
     model = trajectory_manager.get_classifier_model(classifier_name)
     active_s = trajectory_manager.get_al_strategy(strategy, model, classifier_name)
 
@@ -312,7 +315,9 @@ def run_al_strategy(strategy, dataset, classifier_name, labeled_data, time_step)
     map_tid_to_index = {}
 
     index = 0
-    for tid_key in all_data_dict:
+    # print all_data_tids
+
+    for tid_key in all_data_tids:
         data_line = []
         map_tid_to_index[index] = tid_key
         if tid_key in labeled_data_dict:
@@ -323,8 +328,10 @@ def run_al_strategy(strategy, dataset, classifier_name, labeled_data, time_step)
         else:
             tids_not_labeled.add(index)
 
-        for feature in all_data_dict[tid_key]:
-            data_line.append(all_data_dict[tid_key][feature])
+        # for feature in all_data_dict[tid_key]['properties']:
+        #     data_line.append(all_data_dict[tid_key]['properties'][feature])
+        for feature in all_data_traj_feats[tid_key]:
+            data_line.append(all_data_traj_feats[tid_key][feature])
 
         data_to_train_array.append(data_line)
         index+=1
@@ -347,7 +354,7 @@ def run_al_strategy(strategy, dataset, classifier_name, labeled_data, time_step)
     #print "data to train", data_to_train_array
 
     data_to_train_array = np.array(data_to_train_array)
-    #print "train data", data_to_train_array[tids_labeled]
+    # print "train data", data_to_train_array[tids_labeled]
     #print "out train data", provided_labels
 
     model.fit(data_to_train_array[tids_labeled], provided_labels)

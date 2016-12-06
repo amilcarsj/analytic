@@ -12,6 +12,7 @@
 	<script src='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js'></script>
 	<link href='https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css' rel='stylesheet' />
 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
 </head>
@@ -24,8 +25,9 @@
 				<button id='load-data' class='dropbtn'>Load data</button>
 				<nav id="databases-dropdown" class="dropdown-content">
 					<a id='fishing'>Fishing Vessels</a>
-					<!-- <a id='geolife'>Geolife</a> -->
+					<a id='animals'>Animals</a>
 					<a id='hurricanes'>Hurricanes</a>
+					<a id='geolife'>Geolife</a>
 				</nav>
 			</nav>
 			<nav>
@@ -48,9 +50,9 @@
 				</nav>
 			</nav>
 		</nav>
-		<nav id='alert-message-holder'>
+		<!-- <nav id='alert-message-holder'>
 			<nav id='alert-message-nav'></nav>
-		</nav>
+		</nav> -->
 		<nav id='middle-nav'>
 			 <nav id='middle-left-nav'>
 			 	<nav id='loading' class='loader'></nav>
@@ -94,8 +96,7 @@
 					 <nav id='al-header'>
 						 <dl class='inline'>Strategy: <dt id='al-strategy-name'>Random Sampling</dt></dl>
 						 <dl class='inline'>Classifier: <dt id='classifier-name'>Logistic Regression</dt></dl>
-					 	 <dl>Time step: <select name='time-step' id='time-step'>
-					 			<option>5</option>
+					 	 <dl>Bag size: <select name='time-step' id='time-step'>
 					 			<option>10</option>
 					 			<option>20</option>
 					 	 	</select>
@@ -123,8 +124,8 @@
 						<dl class='inline'>Remaining from budget: <dt id='remaining-budget'></dt></dl>
 				</nav>
 				<nav id='labels-info'>
-					 <h1>Manage labels
-					 <i id='info-point-feature-icon' class="material-icons" title="This manages information and actions related to the labels. Here you can choose the color and show/hide the layers of the map.">help</i>
+					 <h1>Manage layers
+					 <i id='info-point-feature-icon' class="material-icons" title="This panel manages information and actions related to the map's layers. Here you can choose the color,  show/hide the layers and change the bags containing results from a simulation.">help</i>
 					 </h1>
 					 <dl>Name: <span class='flex-span'><input type='text' id='label-txt' value=''></span><button id='add-new-label' class='button-error' disabled>Add</button></dl>
 					 <dl>
@@ -144,7 +145,7 @@
 				<nav id='trajectory-features-distribution-chart'></nav>
 			</nav>
 			<nav id='labels-distribution'>
-				<dl></dl>
+				<nav id='labels-distribution-chart'></nav>
 			</nav>
 		</nav>
 	</nav>

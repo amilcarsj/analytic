@@ -9,8 +9,9 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from analytic import trajectory_manager
-
+import http_get_solr_data
 import scipy.sparse as ss
+
 
 def run_classification(dataset, classifier_name, labeled_data):
     t = 1  # seed value
@@ -22,7 +23,10 @@ def run_classification(dataset, classifier_name, labeled_data):
 
     file_name, point_file_name = trajectory_manager.get_file_name(dataset)
 
-    all_data_dict = trajectory_manager.load_data(file_name)
+    # all_data_dict = trajectory_manager.load_line_data(file_name)
+    all_data_tids = http_get_solr_data.get_tids_in_database(dataset)
+    all_data_traj_feats = http_get_solr_data.get_all_trajectory_features(dataset)
+
     model = trajectory_manager.get_classifier_model(classifier_name)
 
     data_to_train_array = []
@@ -33,7 +37,7 @@ def run_classification(dataset, classifier_name, labeled_data):
     map_tid_to_index = {}
 
     index = 0
-    for tid_key in all_data_dict:
+    for tid_key in all_data_tids:
         data_line = []
         map_tid_to_index[index] = tid_key
         if tid_key in labeled_data_dict:
@@ -48,8 +52,10 @@ def run_classification(dataset, classifier_name, labeled_data):
         else:
             tids_not_labeled.append(index)
 
-        for feature in all_data_dict[tid_key]:
-            data_line.append(all_data_dict[tid_key][feature])
+        # for feature in all_data_dict[tid_key]['properties']:
+        #     data_line.append(all_data_dict[tid_key]['properties'][feature])
+        for feature in all_data_traj_feats[tid_key]:
+            data_line.append(all_data_traj_feats[tid_key][feature])
 
         data_to_train_array.append(data_line)
         index += 1
