@@ -15,140 +15,229 @@
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 
 <body>
-	<nav id='main-nav'>
-		<nav id='top-nav'>
-			<button id='logo' class='dropbtn'></button>
-			<nav id='data-dropdown-container' class='dropdown' >
-				<button id='load-data' class='dropbtn'>Load data</button>
-				<nav id="databases-dropdown" class="dropdown-content">
-					<a id='fishing'>Fishing Vessels</a>
-					<a id='animals'>Animals</a>
-					<a id='hurricanes'>Hurricanes</a>
-					<a id='geolife'>Geolife</a>
-				</nav>
-			</nav>
-			<nav>
-				<button id='classifier' class='dropbtn'>Classifier</button>
-				<nav id="classifiers-dropdown" class="dropdown-content">
-					<a id='lr'>Logistic Regression</a>
-					<a id='gnb'>Gaussian Naive Bayes</a>
-					<a id='dt'>Decision Tree</a>
-					<a id='knn'>KNN</a>
-					<a id='ab'>Ada Boost</a>
-					<a id='rf'>Random Forests</a>
-				</nav>
-			</nav>
-			<nav id='al-dropdown-container' class='dropdown'>
-				<button id='al-strategy' class='dropbtn'>AL strategy</button>
-				<nav id="al-dropdown" class="dropdown-content">
-					<a id='rnd'>Random Sampling</a>
-					<a id='unc'>Uncertain Sampling</a>
-					<a id='qbc'>Query-by-committee</a>
-				</nav>
-			</nav>
-		</nav>
-		<!-- <nav id='alert-message-holder'>
-			<nav id='alert-message-nav'></nav>
-		</nav> -->
-		<nav id='middle-nav'>
-			 <nav id='middle-left-nav'>
-			 	<nav id='loading' class='loader'></nav>
-			 	<nav id='map'></nav>
-			 </nav>
-			 <nav id='right'>
-			 	<nav id='point-features-data'>
-			 		<h1>Point Features
-			 			<i id='info-point-feature-icon' class="material-icons" title="This panel displays all information computed using the points of a trajectory">help</i>
-			 		</h1>
-			 		<dl>Feature name: <select name='point-feature-selector' id='point-feature-selector'></select></dl>
-			 		<nav id='point-feat-line-chart'></nav>	
-				</nav>
-				<nav id='trajectory-features-data'>
-					<h1>Trajectory Features
-						<i id='info-point-feature-icon' class="material-icons" title="This panel displays all information attached to a trajectory">help</i>
-					</h1>
-					<nav id='features-tbl'></nav>
-				</nav>
-				<nav id='add-class-nav'>
-					<!--<form id='add-label-form'>!-->
-						<dl><button id='next-trajectory' class='button-error' disabled>Next</button>
-							Label: 
-							<select name='label-select' id='label-selector'></select>
-							<button id='add-label-to-trajectory' class='button-error' disabled>Add</button>
-							<i id='info-add-next-icon' class="material-icons" title="Use the buttons in this panel to find the Next trajectory to be annotated and to Add a label to the selected trajectory.">help</i>
-						</dl>
-					<!--</form>!-->
-				</nav>
-			</nav>
-		</nav>
-		<nav id='next-step-nav'>
-			<dl class='inline extra-margin'>Next step: <dt id='next-step-message'></dt></dl>
-		</nav>
-		<nav id='bottom-nav'>
-			<!--<nav id='classification-container'>!-->
-				<nav id='al-info' class='bottom-nav-margin'>
-					 <h1>Active Learning
-					 <i id='info-point-feature-icon' class="material-icons" title="This panel displays all options selected to execute an active learning experiment.">help</i>
-					 </h1>
-					 <nav id='al-header'>
-						 <dl class='inline'>Strategy: <dt id='al-strategy-name'>Random Sampling</dt></dl>
-						 <dl class='inline'>Classifier: <dt id='classifier-name'>Logistic Regression</dt></dl>
-					 	 <dl>Bag size: <select name='time-step' id='time-step'>
-					 			<option>10</option>
-					 			<option>20</option>
-					 	 	</select>
-					 	 </dl>
-					 	 <dl>Total budget: <select name='total-budget' id='total-budget'>
-					 			<option>20</option>
-					 			<option>40</option>
-					 			<option>60</option>
-					 			<option>80</option>
-					 			<option>100</option>
-					 	 	</select>
-					 	 </dl>
-						<nav id='al-btn-nav'>
-					 		<button id='run-button' class='button-error' disabled>Run</button>
-					 	</nav>
-					 </nav>					 
-				</nav>
-				<nav id='summary' class='bottom-nav-margin'>
-					<h1>Summary
-					<i id='info-point-feature-icon' class="material-icons" title="This panel shows information regarding the experiment that is being executed.">help</i>
-					</h1>
-					<!-- <dl class='inline'>Number of trajectories: <dt id='nof-trajectories'></dt></dl> -->
-						<!-- <dl class='inline'>Remaining: <dt id='remaining'></dt></dl> -->
-						<dl class='inline'>Total labeled: <dt id='total-labeled'>0</dt></dl>
-						<dl class='inline'>Remaining from budget: <dt id='remaining-budget'></dt></dl>
-				</nav>
-				<nav id='labels-info'>
-					 <h1>Manage layers
-					 <i id='info-point-feature-icon' class="material-icons" title="This panel manages information and actions related to the map's layers. Here you can choose the color,  show/hide the layers and change the bags containing results from a simulation.">help</i>
-					 </h1>
-					 <dl>Name: <span class='flex-span'><input type='text' id='label-txt' value=''></span><button id='add-new-label' class='button-error' disabled>Add</button></dl>
-					 <dl>
-					 	Unlabeled: <br> <input id='unlabeled-color' type="color" name="favcolor" value="#FF0000">
-					 </dl>
-					 <nav id='labels-colors'></nav>
-				</nav>
-			<!--</nav>!-->
-		</nav>
-		<nav id='results-nav'>
-			<nav id='point-features-distribution'>
-				<dl>Point Feature: <select id='result-point-feature-selector'></select></dl>
-				<nav id='point-features-distribution-chart'></nav>
-			</nav>
-			<nav id='trajectory-features-distribution'>
-				<dl>Trajectory Feature: <select name='feature-select' id='trajectory-feature-selector'></select></dl>
-				<nav id='trajectory-features-distribution-chart'></nav>
-			</nav>
-			<nav id='labels-distribution'>
-				<nav id='labels-distribution-chart'></nav>
-			</nav>
-		</nav>
-	</nav>
+	<nav id="top-navbar" class="navbar navbar-default navbar-inverse"> <!-- Starts top navbar -->
+	  <div class="container-fluid">
+	    <!-- Brand and toggle get grouped for better mobile display -->
+	    <div class="navbar-header">
+	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <div class="navbar-brand" style='background: url("images/analytic.png") no-repeat; background-size: 180px 55px; width: 180px;' href="#"></div>
+	    </div>
+
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      <ul class="nav navbar-nav"> <!-- starts database dropdown!-->
+	      	<li id="databases-dropdown" class="dropdown">
+		        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Databases <span class="caret"></span></a>
+		        <ul class="dropdown-menu">
+		            <li><a id='fishing' href="#">Fishing Vessels</a></li>
+		            <li><a id='hurricanes' href="#">Hurricanes</a></li>
+		            <li><a id='animals' href="#">Animals</a></li>
+		            <li><a id='geolife' href="#">Geolife</a></li>
+		        </ul>
+	        </li>
+	      </ul><!-- ends database dropdown!-->
+	      <ul class="nav navbar-nav"><!-- starts classifiers dropdown!-->
+	      	<li id="classifiers-dropdown" class="dropdown">
+		      	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Classifiers <span class="caret"></span></a>
+		         <ul class="dropdown-menu">
+		            <li><a id='lr' href="#">Logistic Regression</a></li>
+		            <li><a id='gnb' href="#">Gaussian Naive Bayes</a></li>
+		            <li><a id='dt' href="#">Decision Tree</a></li>
+		            <li><a id='knn' href="#">KNN</a></li>
+		            <li><a id='ab' href="#">Ada Boost</a></li>
+		            <li><a id='rf' href="#">Random Forests</a></li>
+		         </ul>
+	        </li>
+	      </ul><!-- ends classifiers dropdown!-->
+	      <ul class="nav navbar-nav"><!-- starts AL strategy dropdown!-->
+	      	<li id="al-dropdown" class="dropdown">
+		      	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Active Learning Strategies <span class="caret"></span></a>
+		         <ul class="dropdown-menu">
+		            <li><a id='rnd' href="#">Random Sampling</a></li>
+		            <li><a id='unc' href="#">Uncertain Sampling</a></li>
+		            <li><a id='qbc' href="#">Query-by-committee</a></li>
+		         </ul>
+	        </li>
+	      </ul><!-- ends AL strategy dropdown!-->
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav><!-- Ends top navbar -->
+	<div class="panel panel-primary">
+		<div id='middle-nav' class="row"><!-- Starts middle navbar -->
+			<div id='middle-left-nav' class="col-md-8">
+				 <nav id='loading' class='loader'></nav>
+				 <nav id='map'></nav>
+			</div>
+			<div id='right' class="col-md-4">
+				<div id="point-features-data" class="panel panel-primary analytic-panel">
+		      		<div class="panel-heading">Point Features
+		      			<span class="glyphicon glyphicon-info-sign" rel="tooltip" title="This panel displays all information computed using the points of a trajectory"></span>
+		      		</div>
+		      		<div class="panel-body">
+		      			<dl class="dl-no-margin">Feature name: <select name='point-feature-selector' id='point-feature-selector'></select></dl>
+					 		<nav id='point-feat-line-chart'></nav>
+		      		</div>
+		    	</div>
+		    	<div id="trajectory-features-data" class="panel panel-primary analytic-panel">
+		    		<div class="panel-heading">Trajectory Features
+		    			<span class="glyphicon glyphicon-info-sign" rel="tooltip" title="This panel displays all information attached to a trajectory"></span>
+		    		</div>
+		    		<div class="panel-body">
+		    			<nav id='features-tbl'></nav>
+		    		</div>
+		    	</div>
+				<div id='add-class-nav' class="panel panel-primary analytic-panel panel-body panel-body-no-margin">
+					<dl class="dl-no-margin"><button id='next-trajectory' class='btn btn-danger button-size' disabled>Next</button>
+						Label: 
+						<select name='label-select' id='label-selector'></select>
+						<button id='add-label-to-trajectory' class='btn btn-danger button-size' disabled>Add</button>
+						<span class="glyphicon glyphicon-info-sign" rel="tooltip" title="Use the buttons in this panel to find the Next trajectory to be annotated and to Add a label to the selected trajectory."></span>
+					</dl>
+				</div>
+			</div>
+		</div><!-- Ends middle navbar -->
+	</div>
+	<div class="panel panel-primary">
+		<div id='next-step-nav'>
+		<!-- <div class="container-fluid"> -->
+			<div class="row">
+				<div class="col-md-8">
+					<div class='panel panel-primary analytic-panel'>
+						<div class="panel-heading">Next step</div>
+						<div class="panel-body"><dt class='dt-next-step' id='next-step-message'></dt></div>
+					</div>	
+				</div>
+			<!-- </div> -->
+		<!-- </div> -->
+		<!-- <div class="container-fluid"> -->
+			<!-- <div class="row"> -->
+				<div class="col-md-4">
+					<div id='summary' class="panel panel-primary analytic-panel">
+						<div class="panel-heading">Summary
+							<span class="glyphicon glyphicon-info-sign" rel="tooltip" title="This panel shows information regarding the experiment that is being executed."></span>
+						</div>
+						<div class="panel-body">
+							<dl class='inline dl-no-margin'>Total labeled: <dt id='total-labeled'>0</dt></dl>
+							<dl class='inline dl-no-margin'>Remaining from budget: <dt id='remaining-budget'></dt></dl>
+						</div>
+					</div>
+				</div>
+			</div>
+		<!-- </div> -->
+	</div>
+	</div>
+	<div id='bottom-nav'> <!-- Starts bottom-nav!-->
+		<ul class="nav nav-tabs nav-tabs-black" role="tablist">
+			<!-- <li class="active"><a href="#layers-content" role="tab" data-toggle="tab">Layers</a></li> -->
+			<li class='active'><a href="#processing-content" role="tab" data-toggle="tab">Processing</a></li>
+			<li id='results-nav'><a href="#results-content" role="tab" data-toggle="tab" >Results</a></li>
+		</ul>
+		<div class="tab-content">
+			<div id='processing-content' class='tab-pane active'>
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-6">
+							<div id='al-info' class="panel panel-primary analytic-panel">
+								<div class="panel-heading">Active Learning
+									<span class="glyphicon glyphicon-info-sign" rel="tooltip" title="This panel displays all options selected to execute an active learning experiment."></span>
+								</div>
+								<div id='al-header' class="panel-body fixed-panel">
+									<dl class='inline'>Strategy: <dt id='al-strategy-name'>Random Sampling</dt></dl>
+									<dl class='inline'>Classifier: <dt id='classifier-name'>Logistic Regression</dt></dl>
+									<dl>Bag size: 
+										<select name='time-step' id='time-step'>
+											<option>10</option>
+											<option>20</option>
+										</select>
+									</dl>
+									<dl>Total budget: 
+										<select name='total-budget' id='total-budget'>
+											<option>20</option>
+											<option>40</option>
+											<option>60</option>
+											<option>80</option>
+											<option>100</option>
+										</select>
+									</dl>
+									<div id='al-btn-nav'>
+										<button id='run-button' class='btn btn-danger button-size' disabled>Run</button>
+									</div>
+								</div>	
+							</div>
+						</div>
+						<div class='col-md-6'>
+							<div id='labels-info' class="panel panel-primary analytic-panel">
+								<div class="panel-heading">Manage layers
+									<span class="glyphicon glyphicon-info-sign" rel="tooltip" title="This panel manages information and actions related to the map's layers. Here you can choose the color,  show/hide the layers and change the bags containing results from a simulation."></span>
+								</div>
+								<div class="panel-body fixed-panel">
+								 	<dl>Name: 
+								 		<span class='flex-span'>
+								 			<input type='text' id='label-txt' value=''>
+								 		</span>
+								 		<button id='add-new-label' class='btn btn-danger button-size' disabled>Add</button>
+								 	</dl>
+								 	<dl>Unlabeled: <br> 
+								 		<input id='unlabeled-color' type="color" name="favcolor" value="#FF0000">
+								 	</dl>
+									<nav id='labels-colors'></nav>
+								</div>	
+							</div>
+						</div>
+					 </div>	 <!-- ends row!-->
+				</div>			
+			</div>
+			<div id='results-content' class='tab-pane'>
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-4">
+							<div id='point-features-distribution' class="panel panel-primary analytic-panel">
+								<div class="panel-heading">Point Features Distribution</div>
+								<div class='panel-body fixed-panel'>
+									<dl class="dl-no-margin">Point Feature: 
+										<select id='result-point-feature-selector'></select>
+									</dl>
+									<div id='point-features-distribution-chart'>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div id='trajectory-features-distribution' class="panel panel-primary analytic-panel">
+								<div class="panel-heading">Trajectory Features Distribution</div>
+								<div class='panel-body fixed-panel'>
+									<dl class="dl-no-margin">Trajectory Feature: 
+										<select name='feature-select' id='trajectory-feature-selector'></select>
+									</dl>
+									<div id='trajectory-features-distribution-chart'></div>	
+								</div>
+								
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div id='labels-distribution' class="panel panel-primary analytic-panel">
+								<div class="panel-heading">Labels Distribution</div>
+								<div id='labels-distribution-body' class='panel-body fixed-panel'>
+									<div id='labels-distribution-chart'></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>	<!-- Ends tab-content!-->
+	</div><!-- Ends bottom-nav!-->
 	<script type="text/javascript" src="./analytic_js"></script> 
 </body>
 
