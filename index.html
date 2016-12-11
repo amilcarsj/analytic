@@ -3,7 +3,6 @@
 <head>
 	<meta charset="UTF-8">
 	<title>ANALYTiC</title>
-	<link rel="stylesheet" type="text/css" href="./css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -17,10 +16,11 @@
       rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="./css">
 </head>
 
 <body>
-	<nav id="top-navbar" class="navbar navbar-default navbar-inverse"> <!-- Starts top navbar -->
+	<nav id="top-navbar" class="navbar navbar-default"> <!-- Starts top navbar -->
 	  <div class="container-fluid">
 	    <!-- Brand and toggle get grouped for better mobile display -->
 	    <div class="navbar-header">
@@ -30,7 +30,7 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </button>
-	      <div class="navbar-brand" style='background: url("images/analytic.png") no-repeat; background-size: 180px 55px; width: 180px;' href="#"></div>
+	      <div class="navbar-brand" style='background: url("images/analytic.png") no-repeat; background-size: 100px 50px; width: 130px; margin-left: 10px' href="#"></div>
 	    </div>
 
 	    <!-- Collect the nav links, forms, and other content for toggling -->
@@ -127,8 +127,8 @@
 							<span class="glyphicon glyphicon-info-sign" rel="tooltip" title="This panel shows information regarding the experiment that is being executed."></span>
 						</div>
 						<div class="panel-body">
-							<dl class='inline dl-no-margin'>Total labeled: <dt id='total-labeled'>0</dt></dl>
-							<dl class='inline dl-no-margin'>Remaining from budget: <dt id='remaining-budget'></dt></dl>
+							<dl class='inline dl-no-margin'>Total labeled:&nbsp;<dt id='total-labeled'>0</dt></dl>
+							<dl class='inline dl-no-margin'>Remaining from budget:&nbsp;<dt id='remaining-budget'></dt></dl>
 						</div>
 					</div>
 				</div>
@@ -152,15 +152,15 @@
 									<span class="glyphicon glyphicon-info-sign" rel="tooltip" title="This panel displays all options selected to execute an active learning experiment."></span>
 								</div>
 								<div id='al-header' class="panel-body fixed-panel">
-									<dl class='inline'>Strategy: <dt id='al-strategy-name'>Random Sampling</dt></dl>
-									<dl class='inline'>Classifier: <dt id='classifier-name'>Logistic Regression</dt></dl>
-									<dl>Bag size: 
+									<dl class='inline'>Strategy:&nbsp;<dt id='al-strategy-name'>Random Sampling</dt></dl>
+									<dl class='inline'>Classifier:&nbsp;<dt id='classifier-name'>Logistic Regression</dt></dl>
+									<dl>Bag size:&nbsp;
 										<select name='time-step' id='time-step'>
 											<option>10</option>
 											<option>20</option>
 										</select>
 									</dl>
-									<dl>Total budget: 
+									<dl>Total budget:&nbsp;
 										<select name='total-budget' id='total-budget'>
 											<option>20</option>
 											<option>40</option>
@@ -181,13 +181,13 @@
 									<span class="glyphicon glyphicon-info-sign" rel="tooltip" title="This panel manages information and actions related to the map's layers. Here you can choose the color,  show/hide the layers and change the bags containing results from a simulation."></span>
 								</div>
 								<div class="panel-body fixed-panel">
-								 	<dl>Name: 
+								 	<dl>Name:&nbsp;
 								 		<span class='flex-span'>
 								 			<input type='text' id='label-txt' value=''>
 								 		</span>
 								 		<button id='add-new-label' class='btn btn-danger button-size' disabled>Add</button>
 								 	</dl>
-								 	<dl>Unlabeled: <br> 
+								 	<dl>Unlabeled:&nbsp;<br> 
 								 		<input id='unlabeled-color' type="color" name="favcolor" value="#FF0000">
 								 	</dl>
 									<nav id='labels-colors'></nav>
@@ -204,7 +204,7 @@
 							<div id='point-features-distribution' class="panel panel-primary analytic-panel">
 								<div class="panel-heading">Point Features Distribution</div>
 								<div class='panel-body fixed-panel'>
-									<dl class="dl-no-margin">Point Feature: 
+									<dl class="dl-no-margin">Point Feature:&nbsp;
 										<select id='result-point-feature-selector'></select>
 									</dl>
 									<div id='point-features-distribution-chart'>
@@ -217,7 +217,7 @@
 							<div id='trajectory-features-distribution' class="panel panel-primary analytic-panel">
 								<div class="panel-heading">Trajectory Features Distribution</div>
 								<div class='panel-body fixed-panel'>
-									<dl class="dl-no-margin">Trajectory Feature: 
+									<dl class="dl-no-margin">Trajectory Feature:&nbsp;
 										<select name='feature-select' id='trajectory-feature-selector'></select>
 									</dl>
 									<div id='trajectory-features-distribution-chart'></div>	
